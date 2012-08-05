@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Joomla 2.5 Component extension skeleton builder" default="create_component_skeleton" basedir=".">
+	
+	<property file="./build.properties" />
+	
+	<property name="skeleton.src"  value="${path.skeleton}" />
+	
+	<!-- ${project.basedir} refers to that directory where you call the phing command -->
+	<property name="packages.dir"  value="${project.basedir}/packages" />
+	<property name="com_component.dir"  value="${project.basedir}/${com_component}" />
+	
+	<fileset dir="${skeleton.src}/com_component" id="skeleton_files">
+		<include name="**" />
+	</fileset>
+	
+	<target name="start">
+		<echo message="Create component skeleton for ${com_component}." />
+	</target>
+
+	<target name="check_config">
+		<echo message="Checking configuration variables." />
+		
+		<if>
+	        <or>
+	            <equals arg1="${com_component}" arg2="" />
+	            <equals arg1="${componenthumanname}" arg2="" />
+	            <equals arg1="${componentname}" arg2="" />
+	            <equals arg1="${componentfilename}" arg2="" />
+	            <equals arg1="${authorname}" arg2="" />
+	            <equals arg1="${authorurl}" arg2="" />
+	            <equals arg1="${authoremail}" arg2="" />
+	        </or>
+	        <then>         
+	            <fail message="Please set all of the config parameters in build.properies!" />
+	        </then>
+	    </if>
+	    
+	    <if>
+	    	<not>
+	    		<available file="${path.skeleton}" type="dir" />
+	    	</not>
+	    	<then>
+            	<fail message="CAN'T FOUND SKELETON FILES! ${path.skeleton} (defined id build.properties) not found!" />
+        	</then>
+	    </if>	
+	    
+	    <echo message="Configuration variables are passed." />
+	    
+	</target>
+
+	<target name="create_essential_directories" depends="check_config">
+		<echo message="Create essential directories." />
+		<mkdir dir="${com_component.dir}" />
+		
+	    <if>
+	    	<not>
+	    		<available file="${packages.dir}" type="dir" />
+	    	</not>
+	    	<then>
+            	<mkdir dir="${packages.dir}" />
+        	</then>
+	    </if>				
+	</target>
+	
+	<target name="copy_files" depends="check_config, create_essential_directories">
+		<echo message="Copy and generate skeleton files." />
+		
+		<tstamp>
+        	<format property="DATE" pattern="%Y. %m. %d." />
+    	</tstamp>		
+
+		<copy todir="${com_component.dir}" overwrite="true">
+
+			<filterchain>
+	            <replacetokens begintoken="@@" endtoken="@@">
+	                <token key="com_component" value="${com_component}" />
+	                <token key="componenthumanname" value="${componenthumanname}" />
+	                <token key="componentname" value="${componentname}" />
+	                <token key="componentfilename" value="${componentfilename}" />
+	                <token key="date" value="${DATE}" />
+	                <token key="authorname" value="${authorname}" />
+	                <token key="authorurl" value="${authorurl}" />
+	                <token key="authoremail" value="${authoremail}" />
+	            </replacetokens>
+	        </filterchain>			
+
+			<fileset refid="skeleton_files" />
+		</copy>
+
+	</target>
+	
+	<target name="rename_files" depends="check_config, create_essential_directories, copy_files">
+		<echo message="Rename skeleton files." />
+	
+		<move file="${com_component.dir}/component.xml" tofile="${com_component.dir}/${componentfilename}.xml" overwrite="true"/>
+		<move file="${com_component.dir}/joomlabuilder.xml" tofile="${com_component.dir}/builder.xml" overwrite="true"/>
+
+		<move file="${com_component.dir}/admin/component.php" tofile="${com_component.dir}/admin/${componentfilename}.php" overwrite="true"/>
+
+		<move file="${com_component.dir}/site/component.php" tofile="${com_component.dir}/site/${componentfilename}.php" overwrite="true"/>
+		<move file="${com_component.dir}/site/views/component" tofile="${com_component.dir}/site/views/${componentfilename}" overwrite="true"/>
+
+	</target>
+	
+	<target name="create_component_skeleton" description="Create component skeleton for ${com_component}." depends="start, create_essential_directories, copy_files, rename_files">
+		<echo message="Component skeleton for ${com_component} created successfully." />
+	</target>
+	
+</project>
