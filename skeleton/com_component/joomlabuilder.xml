@@ -18,7 +18,7 @@
 	        <then>         
 	            <fail message="Please set the joomla property to copy the files from development environment to the working Joomla 2.5 test environment!" />
 	        </then>
-	    </if>		
+	    </if>
 	</target>
 	
 	<!--target name="copy_all" description="Copies files to test project." depends="check_dependencies">

@@ -92,13 +92,29 @@
 	<target name="rename_files" depends="check_config, create_essential_directories, copy_files">
 		<echo message="Rename skeleton files." />
 	
+		<!-- Rename the component xml file -->
 		<move file="${com_component.dir}/component.xml" tofile="${com_component.dir}/${componentfilename}.xml" overwrite="true"/>
+		
+		<!-- Rename the phing builder file to the phing's default builder.xml -->
 		<move file="${com_component.dir}/joomlabuilder.xml" tofile="${com_component.dir}/builder.xml" overwrite="true"/>
 
+		<!-- Rename admin component file -->
 		<move file="${com_component.dir}/admin/component.php" tofile="${com_component.dir}/admin/${componentfilename}.php" overwrite="true"/>
 
+		<!-- Rename site component and main view file -->
 		<move file="${com_component.dir}/site/component.php" tofile="${com_component.dir}/site/${componentfilename}.php" overwrite="true"/>
 		<move file="${com_component.dir}/site/views/component" tofile="${com_component.dir}/site/views/${componentfilename}" overwrite="true"/>
+		
+		<!-- Rename site language files -->
+		<move file="${com_component.dir}/site/language/en-GB/en-GB.com_component.ini" tofile="${com_component.dir}/site/language/en-GB/en-GB.${com_component}.ini" overwrite="true"/>
+		<move file="${com_component.dir}/site/language/hu-HU/hu-HU.com_component.ini" tofile="${com_component.dir}/site/language/hu-HU/hu-HU.${com_component}.ini" overwrite="true"/>
+
+		<!-- Rename admin language files -->
+		<move file="${com_component.dir}/admin/language/en-GB/en-GB.com_component.ini" tofile="${com_component.dir}/admin/language/en-GB/en-GB.${com_component}.ini" overwrite="true"/>
+		<move file="${com_component.dir}/admin/language/en-GB/en-GB.com_component.sys.ini" tofile="${com_component.dir}/admin/language/en-GB/en-GB.${com_component}.sys.ini" overwrite="true"/>
+
+		<move file="${com_component.dir}/admin/language/hu-HU/hu-HU.com_component.ini" tofile="${com_component.dir}/admin/language/hu-HU/hu-HU.${com_component}.ini" overwrite="true"/>
+		<move file="${com_component.dir}/admin/language/hu-HU/hu-HU.com_component.sys.ini" tofile="${com_component.dir}/admin/language/hu-HU/hu-HU.${com_component}.sys.ini" overwrite="true"/>
 
 	</target>
 	
