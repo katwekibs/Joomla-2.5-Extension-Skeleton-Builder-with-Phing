@@ -96,7 +96,7 @@
 		<move file="${com_component.dir}/component.xml" tofile="${com_component.dir}/${componentfilename}.xml" overwrite="true"/>
 		
 		<!-- Rename the phing builder file to the phing's default builder.xml -->
-		<move file="${com_component.dir}/joomlabuilder.xml" tofile="${com_component.dir}/builder.xml" overwrite="true"/>
+		<move file="${com_component.dir}/joomlabuilder.xml" tofile="${com_component.dir}/build.xml" overwrite="true"/>
 
 		<!-- Rename admin component file -->
 		<move file="${com_component.dir}/admin/component.php" tofile="${com_component.dir}/admin/${componentfilename}.php" overwrite="true"/>

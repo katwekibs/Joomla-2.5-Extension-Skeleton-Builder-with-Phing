@@ -4,12 +4,20 @@
 	<property name="joomla"  value="DEFINE_PATH_HERE" />
 	<property name="packages"  value="../packages" />
 
-	<property name="@@componentfilename@@_src"   value="../@@com_component@@"/>
+	<property name="@@componentfilename@@_src"   value="."/>
 	
 	<fileset dir="${@@componentfilename@@_src}" id="@@componentfilename@@_component_files">
 		<include name="admin/**" />
 		<include name="site/**" />
 		<include name="@@componentfilename@@.xml" />
+	</fileset>
+	
+	<fileset dir="${@@componentfilename@@_src}" id="@@componentfilename@@_admin_files">
+		<include name="admin/**" />
+	</fileset>
+	
+	<fileset dir="${@@componentfilename@@_src}" id="@@componentfilename@@_site_files">
+		<include name="site/**" />
 	</fileset>
 	
 	<target name="check_dependencies">
@@ -21,15 +29,27 @@
 	    </if>
 	</target>
 	
-	<!--target name="copy_all" description="Copies files to test project." depends="check_dependencies">
-		<echo message="Running build.xml. Copying files from dev to test..." />
-		<copy file="${src}/authorunpublish.php" todir="${test}"/>
-		<copy file="${src}/authorunpublish.xml" todir="${test}"/>
-	</target-->
+	<target name="copy_all" description="Copies files to test project." depends="check_dependencies">
+		<echo message="Copying files from your project development directory to Joomla test directory (defined as joomla property in the build.xml file)..." />
+		
+		<!-- Copy the contents of the site directory to joomla/components/com_component directory -->
+		<copy todir="${joomla}/components/@@com_component@@">
+			<fileset refid="@@componentfilename@@_site_files" />
+		</copy>
+		
+		<!-- Copy the contents of the admin directory to joomla/administrator/components/com_component directory -->
+		<copy todir="${joomla}/administrator/components/@@com_component@@">
+			<fileset refid="@@componentfilename@@_admin_files" />
+		</copy>		
+				
+		<!-- Copy the component xml file to joomla/administrator/components/com_component directory -->
+		<copy file="${@@componentfilename@@_src}/@@componentfilename@@.xml" todir="${joomla}/administrator/components/@@com_component@@" />
+				
+	</target>
 	
 	<echo msg="Create installable extension packages (zip)" />
 
-	<target name="create_extension_packages" description="Create installable extension packages..." depends="check_dependencies">
+	<target name="create_extension_packages" description="Create installable extension packages...">
 		<echo msg="Create @@com_component@@ extension package" />
 		<delete file="${packages}/@@com_component@@.zip" />
 		<zip destfile="${packages}/@@com_component@@.zip">
