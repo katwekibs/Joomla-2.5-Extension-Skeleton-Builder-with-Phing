@@ -7,6 +7,9 @@
 	<authorUrl>@@authorurl@@</authorUrl>
 	<version>2.5.0</version>
 	<description>@@componenthumanname@@ Component for Joomla 2.5</description>
+	
+	<!-- Runs on install/uninstall/update; New in 2.5 -->
+	<scriptfile>script.php</scriptfile>
 
 	<install> <!-- Runs on install -->
 		<sql>
@@ -38,7 +41,7 @@
 		<folder>views</folder>
 	</files>
 	<administration>
-		<menu img="class:@@componentfilename@@">@@componenthumanname@@</menu>
+		<menu img="class:@@componentfilename@@">@@com_component@@</menu>
 		<submenu>
 			<!--
 				Note that all & must be escaped to &amp; for the file to be valid

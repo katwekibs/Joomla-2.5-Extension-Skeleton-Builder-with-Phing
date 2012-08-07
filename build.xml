@@ -74,6 +74,7 @@
 			<filterchain>
 	            <replacetokens begintoken="@@" endtoken="@@">
 	                <token key="com_component" value="${com_component}" />
+	                <token key="com_component_uppercase" value="${com_component_uppercase}" />
 	                <token key="componenthumanname" value="${componenthumanname}" />
 	                <token key="componentname" value="${componentname}" />
 	                <token key="componentfilename" value="${componentfilename}" />

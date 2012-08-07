@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="@@componenthumanname@@ Component for Joomla 2.5" default="create_extension_packages" basedir=".">
+<project name="@@componenthumanname@@ Component for Joomla 2.5" default="copy_all" basedir=".">
 
 	<property name="joomla"  value="DEFINE_PATH_HERE" />
 	<property name="packages"  value="../packages" />
@@ -10,14 +10,15 @@
 		<include name="admin/**" />
 		<include name="site/**" />
 		<include name="@@componentfilename@@.xml" />
+		<include name="script.php" />
 	</fileset>
 	
-	<fileset dir="${@@componentfilename@@_src}" id="@@componentfilename@@_admin_files">
-		<include name="admin/**" />
+	<fileset dir="${@@componentfilename@@_src}/admin" id="@@componentfilename@@_admin_files">
+		<include name="**" />
 	</fileset>
 	
-	<fileset dir="${@@componentfilename@@_src}" id="@@componentfilename@@_site_files">
-		<include name="site/**" />
+	<fileset dir="${@@componentfilename@@_src}/site" id="@@componentfilename@@_site_files">
+		<include name="**" />
 	</fileset>
 	
 	<target name="check_dependencies">
@@ -27,6 +28,16 @@
 	            <fail message="Please set the joomla property to copy the files from development environment to the working Joomla 2.5 test environment!" />
 	        </then>
 	    </if>
+	    
+	    <if>
+	    	<not>
+	    		<available file="${joomla}" type="dir" />
+	    	</not>
+	    	<then>
+            	<fail message="Can't found the test Joomla directory defined in joomla property!" />
+        	</then>
+	    </if>
+	    	    
 	</target>
 	
 	<target name="copy_all" description="Copies files to test project." depends="check_dependencies">
