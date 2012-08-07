@@ -1,0 +1,105 @@
+#!/bin/bash
+
+# ================================================================================================
+# Pre parameter checking section
+# ================================================================================================
+
+if [ $# == 0 ]; 
+then
+	echo -e "Try jeskbuild --help for more information.\n";
+	exit 1;
+fi
+
+
+# ================================================================================================
+# Help section
+# ================================================================================================
+
+if [ "$1" == "--help" ]; 
+then
+	echo -e "-------------------------------------------"
+	echo -e "jeskbuild [extension type] [extension name]"
+	echo -e "-------------------------------------------\n"
+	echo -e "Extension types can be one of these:"
+	echo -e "   component"
+	echo -e "   module"
+	echo -e "   plugin"
+	echo -e "   template\n"
+	echo -e "Extension name can be any string, for example:"
+	echo -e "gallery -> will be [com|mod|plg|tpl]_gallery"
+	echo -e '"My SupaDupa Extension" -> will be [com|mod|plg|tpl]_mysupadupaextension'
+	echo -e 'Hint: Try to not use any illegal character... Only [a-zA-Z0-9\ ]\n'
+	exit 0;
+fi
+
+
+# ================================================================================================
+# Dependency checker section
+# ================================================================================================
+
+# Check the phing command by exit code
+# After a command runs, it stores it's exit code in the $? variable
+command -v phing >/dev/null
+if [ $? -eq 1 ];
+then
+	echo -e "----------------------------------------------------------------------------"
+	echo -e "ERROR: Phing command doesn't found. Please install phing to use this script."
+	echo -e "----------------------------------------------------------------------------"
+	echo -e "To install phing via pear, try this:\n"
+	echo -e "$ channel-discover pear.phing.info"
+	echo -e "$ pear install phing/phing\n"
+	exit 1;
+fi
+
+# ================================================================================================
+# Init variables (script directory and build.xml's path)
+# ================================================================================================
+
+# ============================
+# bash - find path to script
+# ============================
+abspath=$(cd ${0%/*} && echo $PWD/${0##*/})
+
+# to get the path only - not the script name - add
+path_only=`dirname "$abspath"`
+parent_only=`dirname "$path_only"`
+
+
+
+case $1 in
+"component")
+	
+	if [ $# -lt 2 ]; 
+	then
+		echo -e "You have to add your component's (human readable) name as second parameter. Restriction: [a-zA-Z0-9\ ].\n" 
+		exit 1;
+	fi
+	
+	# Remove any illegal characters
+	componentname=`echo $2 | sed 's/[^(a-z)|(A-Z)|(0-9)|\ ]//g'`;
+	
+	phing -Dextensioninputtype=component -Dextensioninputname="$componentname" -f "$parent_only/build.xml"
+	
+	exit 0;
+	;;
+"module")
+	echo "TODO: module"
+	exit 0;
+	;;
+"plugin")
+	echo "TODO: plugin"
+	exit 0;
+	;;
+"template")
+	echo "TODO: template"
+	exit 0;
+	;;
+*)
+	echo -e "For the first parameter please specify one of these words:"
+	echo -e "  component"
+	echo -e "  module"
+	echo -e "  plugin"
+	echo -e "  template\n"
+	exit 1;
+esac 
+
