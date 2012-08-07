@@ -6,8 +6,8 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controller');
  
 /**
- * @@componenthumanname@@ Component Controller
+ * @@extensionhumanname@@ Component Controller
  */
-class @@componentname@@Controller extends JController
+class @@extensionname@@Controller extends JController
 {
 }

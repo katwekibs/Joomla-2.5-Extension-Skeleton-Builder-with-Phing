@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HTML View class for the HelloWorld Component
  */
-class @@componentname@@View@@componentname@@ extends JView
+class @@extensionname@@View@@extensionname@@ extends JView
 {
 	// Overwriting JView display method
 	function display($tpl = null) 

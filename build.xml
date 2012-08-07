@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Joomla 2.5 Component extension skeleton builder" default="create_component_skeleton" basedir=".">
+<project name="Joomla 2.5 Component extension skeleton builder" default="create_component_skeleton">
 	
-	<property file="./build.properties" />
+	<!-- Needed for custom string manipulations -->
+	<taskdef name="extensionproperty" classname="joomla.classes.ExtensionPropertyTask" />
 	
-	<property name="skeleton.src"  value="${path.skeleton}" />
+	<!-- Command line arguments -->
+	<property name="extensioninputtype"  value="" />
+	<property name="extensioninputname"  value="" />
 	
-	<!-- ${project.basedir} refers to that directory where you call the phing command -->
-	<property name="packages.dir"  value="${project.basedir}/packages" />
-	<property name="com_component.dir"  value="${project.basedir}/${com_component}" />
+	<!-- Generated properties from the command line argument -->
+    <extensionproperty name="extension" value="${extensioninputname}" extension="${extensioninputtype}" />
+
+	<!-- id the basedir is unset in the project tag, than it refers to this build file's directory -->
+	<property name="skeleton.src"  value="${project.basedir}/skeletons" />
 	
-	<fileset dir="${skeleton.src}/com_component" id="skeleton_files">
+	<!-- ${application.startdir} refers to that directory where you call the phing command -->
+	<property name="packages.dir"  value="${application.startdir}/packages" />
+	<property name="prefix_extension.dir"  value="${application.startdir}/${prefix_extension}" />
+	
+	<fileset dir="${skeleton.src}/${prefix}${extensioninputtype}" id="skeleton_files">
 		<include name="**" />
 	</fileset>
 	
-	<target name="start">
-		<echo message="Create component skeleton for ${com_component}." />
+	<target name="start" depends="check_config">
+		<echo message="Create ${extensioninputtype} skeleton for ${prefix_extension}." />
 	</target>
 
 	<target name="check_config">
 		<echo message="Checking configuration variables." />
-		
+		<echo message="${skeleton.src}" />
 		<if>
 	        <or>
-	            <equals arg1="${com_component}" arg2="" />
-	            <equals arg1="${componenthumanname}" arg2="" />
-	            <equals arg1="${componentname}" arg2="" />
-	            <equals arg1="${componentfilename}" arg2="" />
-	            <equals arg1="${authorname}" arg2="" />
-	            <equals arg1="${authorurl}" arg2="" />
-	            <equals arg1="${authoremail}" arg2="" />
+	            <equals arg1="${extensioninputtype}" arg2="" />
+	            <equals arg1="${extensioninputname}" arg2="" />
 	        </or>
 	        <then>         
-	            <fail message="Please set all of the config parameters in build.properies!" />
+	            <fail message="Please set all of the config parameters as phing command line argument (phing -Dextensioninputtype=component|module|plugin|template -Dextensioninputname='Your Extension Name' )!" />
 	        </then>
 	    </if>
 	    
 	    <if>
 	    	<not>
-	    		<available file="${path.skeleton}" type="dir" />
+	    		<available file="${skeleton.src}" type="dir" />
 	    	</not>
 	    	<then>
-            	<fail message="CAN'T FOUND SKELETON FILES! ${path.skeleton} (defined id build.properties) not found!" />
+            	<fail message="CAN'T FOUND SKELETON FILES! ${skeleton.src} my be miscomputed!" />
         	</then>
 	    </if>	
 	    
@@ -50,7 +54,7 @@
 
 	<target name="create_essential_directories" depends="check_config">
 		<echo message="Create essential directories." />
-		<mkdir dir="${com_component.dir}" />
+		<mkdir dir="${prefix_extension.dir}" />
 		
 	    <if>
 	    	<not>
@@ -62,26 +66,23 @@
 	    </if>				
 	</target>
 	
-	<target name="copy_files" depends="check_config, create_essential_directories">
+	<target name="copy_component_files" depends="check_config, create_essential_directories">
 		<echo message="Copy and generate skeleton files." />
 		
 		<tstamp>
         	<format property="DATE" pattern="%Y. %m. %d." />
     	</tstamp>		
 
-		<copy todir="${com_component.dir}" overwrite="true">
+		<copy todir="${prefix_extension.dir}" overwrite="true">
 
 			<filterchain>
 	            <replacetokens begintoken="@@" endtoken="@@">
-	                <token key="com_component" value="${com_component}" />
-	                <token key="com_component_uppercase" value="${com_component_uppercase}" />
-	                <token key="componenthumanname" value="${componenthumanname}" />
-	                <token key="componentname" value="${componentname}" />
-	                <token key="componentfilename" value="${componentfilename}" />
+	                <token key="prefix_extension" value="${prefix_extension}" />
+	                <token key="prefix_extension_uppercase" value="${prefix_extension_uppercase}" />
+	                <token key="extensionhumanname" value="${extensionhumanname}" />
+	                <token key="extensionname" value="${extensionname}" />
+	                <token key="extensionfilename" value="${extensionfilename}" />
 	                <token key="date" value="${DATE}" />
-	                <token key="authorname" value="${authorname}" />
-	                <token key="authorurl" value="${authorurl}" />
-	                <token key="authoremail" value="${authoremail}" />
 	            </replacetokens>
 	        </filterchain>			
 
@@ -90,37 +91,46 @@
 
 	</target>
 	
-	<target name="rename_files" depends="check_config, create_essential_directories, copy_files">
+	<target name="rename_component_files" depends="check_config, create_essential_directories, copy_component_files">
 		<echo message="Rename skeleton files." />
 	
 		<!-- Rename the component xml file -->
-		<move file="${com_component.dir}/component.xml" tofile="${com_component.dir}/${componentfilename}.xml" overwrite="true"/>
+		<move file="${prefix_extension.dir}/component.xml" tofile="${prefix_extension.dir}/${extensionfilename}.xml" overwrite="true"/>
 		
 		<!-- Rename the phing builder file to the phing's default builder.xml -->
-		<move file="${com_component.dir}/joomlabuilder.xml" tofile="${com_component.dir}/build.xml" overwrite="true"/>
+		<move file="${prefix_extension.dir}/joomlabuilder.xml" tofile="${prefix_extension.dir}/build.xml" overwrite="true"/>
 
 		<!-- Rename admin component file -->
-		<move file="${com_component.dir}/admin/component.php" tofile="${com_component.dir}/admin/${componentfilename}.php" overwrite="true"/>
+		<move file="${prefix_extension.dir}/admin/component.php" tofile="${prefix_extension.dir}/admin/${extensionfilename}.php" overwrite="true"/>
 
 		<!-- Rename site component and main view file -->
-		<move file="${com_component.dir}/site/component.php" tofile="${com_component.dir}/site/${componentfilename}.php" overwrite="true"/>
-		<move file="${com_component.dir}/site/views/component" tofile="${com_component.dir}/site/views/${componentfilename}" overwrite="true"/>
+		<move file="${prefix_extension.dir}/site/component.php" tofile="${prefix_extension.dir}/site/${extensionfilename}.php" overwrite="true"/>
+		<move file="${prefix_extension.dir}/site/views/component" tofile="${prefix_extension.dir}/site/views/${extensionfilename}" overwrite="true"/>
 		
 		<!-- Rename site language files -->
-		<move file="${com_component.dir}/site/language/en-GB/en-GB.com_component.ini" tofile="${com_component.dir}/site/language/en-GB/en-GB.${com_component}.ini" overwrite="true"/>
-		<move file="${com_component.dir}/site/language/hu-HU/hu-HU.com_component.ini" tofile="${com_component.dir}/site/language/hu-HU/hu-HU.${com_component}.ini" overwrite="true"/>
+		<move file="${prefix_extension.dir}/site/language/en-GB/en-GB.${prefix}${extensioninputtype}.ini" tofile="${prefix_extension.dir}/site/language/en-GB/en-GB.${prefix_extension}.ini" overwrite="true"/>
+		<move file="${prefix_extension.dir}/site/language/hu-HU/hu-HU.${prefix}${extensioninputtype}.ini" tofile="${prefix_extension.dir}/site/language/hu-HU/hu-HU.${prefix_extension}.ini" overwrite="true"/>
 
 		<!-- Rename admin language files -->
-		<move file="${com_component.dir}/admin/language/en-GB/en-GB.com_component.ini" tofile="${com_component.dir}/admin/language/en-GB/en-GB.${com_component}.ini" overwrite="true"/>
-		<move file="${com_component.dir}/admin/language/en-GB/en-GB.com_component.sys.ini" tofile="${com_component.dir}/admin/language/en-GB/en-GB.${com_component}.sys.ini" overwrite="true"/>
+		<move file="${prefix_extension.dir}/admin/language/en-GB/en-GB.${prefix}${extensioninputtype}.ini" tofile="${prefix_extension.dir}/admin/language/en-GB/en-GB.${prefix_extension}.ini" overwrite="true"/>
+		<move file="${prefix_extension.dir}/admin/language/en-GB/en-GB.${prefix}${extensioninputtype}.sys.ini" tofile="${prefix_extension.dir}/admin/language/en-GB/en-GB.${prefix_extension}.sys.ini" overwrite="true"/>
 
-		<move file="${com_component.dir}/admin/language/hu-HU/hu-HU.com_component.ini" tofile="${com_component.dir}/admin/language/hu-HU/hu-HU.${com_component}.ini" overwrite="true"/>
-		<move file="${com_component.dir}/admin/language/hu-HU/hu-HU.com_component.sys.ini" tofile="${com_component.dir}/admin/language/hu-HU/hu-HU.${com_component}.sys.ini" overwrite="true"/>
+		<move file="${prefix_extension.dir}/admin/language/hu-HU/hu-HU.${prefix}${extensioninputtype}.ini" tofile="${prefix_extension.dir}/admin/language/hu-HU/hu-HU.${prefix_extension}.ini" overwrite="true"/>
+		<move file="${prefix_extension.dir}/admin/language/hu-HU/hu-HU.${prefix}${extensioninputtype}.sys.ini" tofile="${prefix_extension.dir}/admin/language/hu-HU/hu-HU.${prefix_extension}.sys.ini" overwrite="true"/>
 
 	</target>
 	
-	<target name="create_component_skeleton" description="Create component skeleton for ${com_component}." depends="start, create_essential_directories, copy_files, rename_files">
-		<echo message="Component skeleton for ${com_component} created successfully." />
+	<target name="create_component_skeleton" description="Create component skeleton for ${prefix_extension}." depends="start, trace, create_essential_directories, copy_component_files, rename_component_files">
+		<echo message="Component skeleton for ${prefix_extension} created successfully." />
 	</target>
 	
+	<target name="trace" depends="check_config">
+		<echo message="Generated properties are listed below." />
+		<echo message="TRACE: prefix: ${prefix}." />
+		<echo message="TRACE: prefix_extension: ${prefix_extension}." />
+		<echo message="TRACE: prefix_extension_uppercase: ${prefix_extension_uppercase}." />
+		<echo message="TRACE: extensionname: ${extensionname}." />
+		<echo message="TRACE: extensionhumanname: ${extensionhumanname}." />
+		<echo message="TRACE: extensionfilename: ${extensionfilename}." />
+    </target>
 </project>

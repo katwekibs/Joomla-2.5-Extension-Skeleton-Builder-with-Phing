@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="@@extensionhumanname@@ Component for Joomla 2.5" default="copy_all" basedir=".">
+
+	<property name="joomla"  value="DEFINE_PATH_HERE" />
+	<property name="packages"  value="../packages" />
+
+	<property name="@@extensionfilename@@_src"   value="."/>
+	
+	<fileset dir="${@@extensionfilename@@_src}" id="@@extensionfilename@@_component_files">
+		<include name="admin/**" />
+		<include name="site/**" />
+		<include name="@@extensionfilename@@.xml" />
+		<include name="script.php" />
+	</fileset>
+	
+	<fileset dir="${@@extensionfilename@@_src}/admin" id="@@extensionfilename@@_admin_files">
+		<include name="**" />
+	</fileset>
+	
+	<fileset dir="${@@extensionfilename@@_src}/site" id="@@extensionfilename@@_site_files">
+		<include name="**" />
+	</fileset>
+	
+	<target name="check_dependencies">
+		<if>
+            <equals arg1="${joomla}" arg2="DEFINE_PATH_HERE" />
+	        <then>         
+	            <fail message="Please set the joomla property to copy the files from development environment to the working Joomla 2.5 test environment!" />
+	        </then>
+	    </if>
+	    
+	    <if>
+	    	<not>
+	    		<available file="${joomla}" type="dir" />
+	    	</not>
+	    	<then>
+            	<fail message="Can't found the test Joomla directory defined in joomla property!" />
+        	</then>
+	    </if>
+	    	    
+	</target>
+	
+	<target name="copy_all" description="Copies files to test project." depends="check_dependencies">
+		<echo message="Copying files from your project development directory to Joomla test directory (defined as joomla property in the build.xml file)..." />
+		
+		<!-- Copy the contents of the site directory to joomla/components/prefix_extension directory -->
+		<copy todir="${joomla}/components/@@prefix_extension@@">
+			<fileset refid="@@extensionfilename@@_site_files" />
+		</copy>
+		
+		<!-- Copy the contents of the admin directory to joomla/administrator/components/prefix_extension directory -->
+		<copy todir="${joomla}/administrator/components/@@prefix_extension@@">
+			<fileset refid="@@extensionfilename@@_admin_files" />
+		</copy>		
+				
+		<!-- Copy the component xml file to joomla/administrator/components/prefix_extension directory -->
+		<copy file="${@@extensionfilename@@_src}/@@extensionfilename@@.xml" todir="${joomla}/administrator/components/@@prefix_extension@@" />
+				
+	</target>
+	
+	<echo msg="Create installable extension packages (zip)" />
+
+	<target name="create_extension_package" description="Create installable extension packages...">
+		<echo msg="Create @@prefix_extension@@ extension package" />
+		<delete file="${packages}/@@prefix_extension@@.zip" />
+		<zip destfile="${packages}/@@prefix_extension@@.zip">
+	 	    <fileset refid="@@extensionfilename@@_component_files" />
+		</zip>		
+	</target>
+</project>

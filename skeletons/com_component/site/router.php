@@ -1,7 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 
-function @@componentname@@BuildRoute( &$query )
+function @@extensionname@@BuildRoute( &$query )
 {
        $segments = array();
        if(isset($query['view']))
@@ -17,7 +17,7 @@ function @@componentname@@BuildRoute( &$query )
        return $segments;
 }
 
-function @@componentname@@ParseRoute( $segments )
+function @@extensionname@@ParseRoute( $segments )
 {
        $vars = array();
        switch($segments[0])

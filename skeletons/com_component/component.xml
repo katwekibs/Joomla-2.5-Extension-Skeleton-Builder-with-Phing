@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5" method="upgrade">
-	<name>@@com_component@@</name>
-	<author>@@authorname@@</author>
+	<name>@@prefix_extension@@</name>
+	<author>Your name</author>
 	<creationDate>@@date@@</creationDate>
-	<authorEmail>@@authoremail@@</authorEmail>
-	<authorUrl>@@authorurl@@</authorUrl>
+	<authorEmail>your@email.com</authorEmail>
+	<authorUrl>www.yourwebsite.com</authorUrl>
 	<version>2.5.0</version>
-	<description>@@componenthumanname@@ Component for Joomla 2.5</description>
+	<description>@@extensionhumanname@@ Component for Joomla 2.5</description>
 	
 	<!-- Runs on install/uninstall/update; New in 2.5 -->
 	<scriptfile>script.php</scriptfile>
@@ -28,7 +28,7 @@
 	</update>
 
 	<files folder="site">
-		<filename>@@componentfilename@@.php</filename>
+		<filename>@@extensionfilename@@.php</filename>
 		<filename>controller.php</filename>
 		<filename>index.html</filename>
 		<filename>metadata.xml</filename>
@@ -41,18 +41,18 @@
 		<folder>views</folder>
 	</files>
 	<administration>
-		<menu img="class:@@componentfilename@@">@@com_component@@</menu>
+		<menu img="class:@@extensionfilename@@">@@prefix_extension@@</menu>
 		<submenu>
 			<!--
 				Note that all & must be escaped to &amp; for the file to be valid
 				XML and be parsed by the installer
 			-->
-			<menu link="option=@@com_component@@" view="@@componentfilename@@" img="class:@@componentfilename@@"
-				alt="@@componenthumanname@@/@@componenthumanname@@">@@componenthumanname@@</menu>
+			<menu link="option=@@prefix_extension@@" view="@@extensionfilename@@" img="class:@@extensionfilename@@"
+				alt="@@extensionhumanname@@/@@extensionhumanname@@">@@extensionhumanname@@</menu>
 		</submenu>
 		<files folder="admin">
 			<filename>access.xml</filename>
-			<filename>@@componentfilename@@.php</filename>
+			<filename>@@extensionfilename@@.php</filename>
 			<filename>config.xml</filename>
 			<filename>controller.php</filename>
 			<filename>index.html</filename>
@@ -65,10 +65,10 @@
 			<folder>views</folder>
 		</files>
 		<languages folder="admin">
-			<language tag="en-GB">language/en-GB/en-GB.@@com_component@@.ini</language>
-			<language tag="en-GB">language/en-GB/en-GB.@@com_component@@.sys.ini</language>
-			<language tag="hu-HU">language/hu-HU/hu-HU.@@com_component@@.ini</language>
-			<language tag="hu-HU">language/hu-HU/hu-HU.@@com_component@@.sys.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.@@prefix_extension@@.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.@@prefix_extension@@.sys.ini</language>
+			<language tag="hu-HU">language/hu-HU/hu-HU.@@prefix_extension@@.ini</language>
+			<language tag="hu-HU">language/hu-HU/hu-HU.@@prefix_extension@@.sys.ini</language>
 		</languages>
 	</administration>
 </extension>

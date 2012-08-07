@@ -5,8 +5,8 @@ defined('_JEXEC') or die('Restricted access');
 // import joomla controller library
 jimport('joomla.application.component.controller');
  
-// Get an instance of the controller prefixed by @@componentname@@
-$controller = JController::getInstance('@@componentname@@');
+// Get an instance of the controller prefixed by @@extensionname@@
+$controller = JController::getInstance('@@extensionname@@');
  
 // Perform the Request task
 $input = JFactory::getApplication()->input;

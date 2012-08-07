@@ -1,13 +1,13 @@
 <?php
 /**
  * @package		Joomla.Administrator
- * @subpackage	@@com_component@@
+ * @subpackage	@@prefix_extension@@
  */
 
 defined('_JEXEC') or die;
 
 // Access check.
-if (!JFactory::getUser()->authorise('core.manage', '@@com_component@@')) {
+if (!JFactory::getUser()->authorise('core.manage', '@@prefix_extension@@')) {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
@@ -15,6 +15,6 @@ if (!JFactory::getUser()->authorise('core.manage', '@@com_component@@')) {
 jimport('joomla.application.component.controller');
 
 // Execute the task.
-$controller	= JController::getInstance('@@componentname@@');
+$controller	= JController::getInstance('@@extensionname@@');
 $controller->execute(JRequest::getCmd('task'));
 $controller->redirect();

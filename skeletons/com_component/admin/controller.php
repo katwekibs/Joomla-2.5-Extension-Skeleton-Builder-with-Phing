@@ -5,12 +5,12 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.controller');
 
 /**
- * '@@componentname@@ master display controller.
+ * '@@extensionname@@ master display controller.
  *
  * @package		Joomla.Administrator
- * @subpackage	@@com_component@@
+ * @subpackage	@@prefix_extension@@
  */
-class @@componentname@@Controller extends JController
+class @@extensionname@@Controller extends JController
 {
 	/**
 	 * Method to display a view.
