@@ -8,6 +8,6 @@ jimport('joomla.application.component.controller');
 /**
  * @@extensionhumanname@@ Component Controller
  */
-class @@extensionname@@Controller extends JController
+class @@extensionname@@Controller extends JControllerLegacy
 {
 }

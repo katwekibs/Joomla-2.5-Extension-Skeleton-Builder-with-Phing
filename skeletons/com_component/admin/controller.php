@@ -10,7 +10,7 @@ jimport('joomla.application.component.controller');
  * @package		Joomla.Administrator
  * @subpackage	@@prefix_extension@@
  */
-class @@extensionname@@Controller extends JController
+class @@extensionname@@Controller extends JControllerLegacy
 {
 	/**
 	 * Method to display a view.
